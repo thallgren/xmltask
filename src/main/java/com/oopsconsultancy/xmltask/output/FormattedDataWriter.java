@@ -1,6 +1,7 @@
 package com.oopsconsultancy.xmltask.output;
 
 import java.io.Writer;
+import java.util.Properties;
 import java.util.Stack;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
@@ -328,14 +329,25 @@ public class FormattedDataWriter extends XMLWriter implements LexicalHandler, Ou
    */
   public void startDocument() throws SAXException {
     reset();
-    String encoding = transformer.getOutputProperty(OutputKeys.ENCODING);
-    String standalone = null;
-    if(transformer.getOutputProperties().containsKey(OutputKeys.STANDALONE))
-      standalone = transformer.getOutputProperty(OutputKeys.STANDALONE);
-    write("<?xml version=\"1.0\"" + (encoding == null ? " UTF-8" : " encoding=\""
-      +encoding+"\"") + (standalone == null ? "" : " standalone=\""+standalone+"\"") + "?>\n\n");
-  }
+    write("<?xml version=\"1.0\"");
 
+    Properties props = transformer.getOutputProperties();
+    String encoding = props.getProperty(OutputKeys.ENCODING);
+    if(encoding != null) {
+      write(" encoding=\"");
+      write(encoding);
+      write("\"");
+    }
+
+    String standalone = null;
+    if(props.containsKey(OutputKeys.STANDALONE)) {
+      standalone = props.getProperty(OutputKeys.STANDALONE);
+      write(" standalone=\"");
+      write(standalone);
+      write("\"");
+    }
+    write("?>\n\n");
+  }
 
 
   public void comment(char[] ch, int start, int length) throws SAXException {
