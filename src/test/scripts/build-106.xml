@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+<project name="test" default="main" basedir=".">
+  <taskdef name="xmltask" classname="com.oopsconsultancy.xmltask.ant.XmlTask"/>
+
+  <target name="main" depends="copy,paste"/>
+
+  <!-- tests copying across xmltask instances -->
+  <target name="copy">
+    <xmltask source="106.xml" report="true" standalone="false">
+      <copy path="/a/b/comment()" property="prop"/>
+    </xmltask>
+    <echo>Copied to '${prop}'</echo>
+  </target>  
+
+  <target name="paste">
+    <xmltask source="106.xml" dest="106-out.xml" report="true" standalone="false">
+      <paste path="/a">
+        <![CDATA[${prop}]]>
+      </paste>
+    </xmltask>
+  </target>
+
+</project>
